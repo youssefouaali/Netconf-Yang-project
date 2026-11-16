@@ -1,0 +1,35 @@
+name: net-topology
+topology:
+  nodes:
+    # Arista Devices (ceos:latest)
+    sw1:
+      kind: arista_ceos
+      image: ceos:latest
+      mgmt-ipv4: 172.20.20.13
+    sw2:
+      kind: arista_ceos
+      image: ceos:latest
+      mgmt-ipv4: 172.20.20.12
+    router1:
+      kind: arista_ceos
+      image: ceos:latest
+      mgmt-ipv4: 172.20.20.10
+
+    router2:
+      kind: arista_ceos
+      image: ceos:latest
+      mgmt-ipv4: 172.20.20.11
+    
+
+  links:
+    # End host 1 connected to switch 1
+    - endpoints: ["router2:eth1", "router1:eth1"]
+
+    # End host 2 connected to switch 2
+    - endpoints: ["router2:eth2", "sw2:eth1"]
+
+    # Inter-switch link connecting sw1 and sw2
+    - endpoints: ["sw1:eth2", "sw2:eth2"]
+
+    # Switch 1 connected to the Arista router
+    - endpoints: ["sw1:eth3", "router1:eth2"]

@@ -1,0 +1,34 @@
+<config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <network-instances xmlns="http://openconfig.net/yang/network-instance">
+    <network-instance>
+      <name>default</name>
+      <protocols>
+        <protocol>
+          <identifier xmlns:oc-pol-types="http://openconfig.net/yang/policy-types">oc-pol-types:OSPFV2</identifier>
+          <name>OSPFv2</name>
+          <ospfv2>
+            <global>
+              <config>
+                <router-id>{{ router_id }}</router-id>
+              </config>
+            </global>
+            <areas>
+              <area>
+                <identifier>{{ ospf_area }}</identifier>
+                <interfaces>
+                  <interface>
+                    <id>{{ interface_name }}</id>
+                    <config>
+                      <id>{{ interface_name }}</id>
+                      <metric>10</metric>
+                    </config>
+                  </interface>
+                </interfaces>
+              </area>
+            </areas>
+          </ospfv2>
+        </protocol>
+      </protocols>
+    </network-instance>
+  </network-instances>
+</config>

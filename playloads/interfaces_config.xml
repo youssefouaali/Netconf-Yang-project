@@ -4,8 +4,19 @@
       <name>Ethernet1</name>
       <config>
         <name>Ethernet1</name>
-        <description>Configured via NETCONF and OpenConfig YANG</description>
+        <description>Configured via NETCONF - DHCP</description>
+        <enabled>true</enabled>
       </config>
+      <subinterfaces>
+        <subinterface>
+          <index>0</index>
+          <ipv4 xmlns="http://openconfig.net/yang/interfaces/ip">
+            <config>
+              <dhcp-client>true</dhcp-client>
+            </config>
+          </ipv4>
+        </subinterface>
+      </subinterfaces>
     </interface>
   </interfaces>
 </config>

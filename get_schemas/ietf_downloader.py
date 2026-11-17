@@ -18,4 +18,4 @@ with manager.connect(
     schema = m.get_schema("ietf-interfaces")
     with open("ietf-interfaces.yang", "w") as yf:
         yf.write(schema.data)
-    print("Saved ietf-interfaces.yang successfully!")
+    print("Saved ietf-interfaces.yang successfully!")       

@@ -23,27 +23,30 @@ for device in inventory["devices"] :
         with manager.connect(**netconf_args) as m :
             print ("succesfuly connected to netconf (ssh)") 
          
-        if ":candidate" not in m.server_capabilities :
-            print(f"{device['name']} does not support the candidate datastores. ")
-            continue
-        with m.locked(target="candidate") :
-            print("locked candidate datastores . pushing draft config...")
+            if ":candidate" not in m.server_capabilities :
+                print(f"{device['name']} does not support the candidate datastores. ")
+                continue
             
+            print("pushing draft config to candidate datastore...")
             m.edit_config(target="candidate", config= interface_playload)
             
             if ":validate:1.1" in m.server_capabilities or ":validate:1.0" in m.server_capabilities :
-                m.validate(source="candidate")
-                print("CANDIDATE CONFIG VALIDATED !")
+                    m.validate(source="candidate")
+                    print("CANDIDATE CONFIG VALIDATED !")
             
-            print("Applying with 60s confirmed-commit timer...")
-            m.commit(confirmed=True,timeout="60")
-            
-            time.sleep(2)
-            m.get_config(source="running")
-            
-            m.commit()
-            print(f"--------------SUCCESSFULLY created and confirmed on {device["name"]} !-------------")
-            
+            if ":confirmed-commit" in m.server_capabilities:
+                    print("Applying with 60s confirmed-commit timer...")
+                    m.commit(confirmed=True, timeout="60")
+                    time.sleep(2)
+                    m.get_config(source="running")
+                    m.commit()
+            else:
+                    print("Server does not support confirmed-commit; performing standard commit...")
+                    m.commit()
+                    time.sleep(2)
+                    m.get_config(source="running")
+
+            print(f"--------------SUCCESSFULLY created and confirmed on {device['name']} !-------------")
         
     except Exception as e :
         print(f"connection failed on {device["name"]} : {e}")
